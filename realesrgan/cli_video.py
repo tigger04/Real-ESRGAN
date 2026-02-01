@@ -1,26 +1,12 @@
 # ABOUTME: CLI entry point for video upscaling (the `upscale-video` command).
 # ABOUTME: Extracted from inference_realesrgan_video.py; uses paths.get_weights_dir() for model cache.
 import argparse
-import cv2
 import glob
 import mimetypes
-import numpy as np
 import os
 import shutil
 import subprocess
-import torch
-
-from realesrgan import _compat  # noqa: F401 — must run before basicsr imports
-from basicsr.archs.rrdbnet_arch import RRDBNet
-from basicsr.utils.download_util import load_file_from_url
 from os import path as osp
-from tqdm import tqdm
-
-import ffmpeg
-
-from realesrgan import RealESRGANer
-from realesrgan.archs.srvgg_arch import SRVGGNetCompact
-from realesrgan.paths import get_weights_dir
 
 
 def _get_version():
@@ -383,6 +369,22 @@ def main():
         default='auto',
         help='Image extension. Options: auto | jpg | png, auto means using the same extension as inputs')
     args = parser.parse_args()
+
+    # Heavy imports deferred to after argparse so --help / --version respond instantly
+    global cv2, np, torch, ffmpeg, tqdm
+    global RRDBNet, SRVGGNetCompact, RealESRGANer
+    global load_file_from_url, get_weights_dir
+    import cv2
+    import numpy as np
+    import torch
+    import ffmpeg
+    from tqdm import tqdm
+    from realesrgan import _compat  # noqa: F401 — must run before basicsr imports
+    from basicsr.archs.rrdbnet_arch import RRDBNet
+    from basicsr.utils.download_util import load_file_from_url
+    from realesrgan import RealESRGANer
+    from realesrgan.archs.srvgg_arch import SRVGGNetCompact
+    from realesrgan.paths import get_weights_dir
 
     args.input = args.input.rstrip('/').rstrip('\\')
     os.makedirs(args.output, exist_ok=True)

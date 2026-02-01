@@ -1,17 +1,8 @@
 # ABOUTME: CLI entry point for image upscaling (the `upscale` command).
 # ABOUTME: Extracted from inference_realesrgan.py; uses paths.get_weights_dir() for model cache.
 import argparse
-import cv2
 import glob
 import os
-
-from realesrgan import _compat  # noqa: F401 — must run before basicsr imports
-from basicsr.archs.rrdbnet_arch import RRDBNet
-from basicsr.utils.download_util import load_file_from_url
-
-from realesrgan import RealESRGANer
-from realesrgan.archs.srvgg_arch import SRVGGNetCompact
-from realesrgan.paths import get_weights_dir
 
 
 def _get_version():
@@ -71,6 +62,15 @@ def main():
         '-g', '--gpu-id', type=int, default=None, help='gpu device to use (default=None) can be 0,1,2 for multi-gpu')
 
     args = parser.parse_args()
+
+    # Heavy imports deferred to after argparse so --help / --version respond instantly
+    import cv2
+    from realesrgan import _compat  # noqa: F401 — must run before basicsr imports
+    from basicsr.archs.rrdbnet_arch import RRDBNet
+    from basicsr.utils.download_util import load_file_from_url
+    from realesrgan import RealESRGANer
+    from realesrgan.archs.srvgg_arch import SRVGGNetCompact
+    from realesrgan.paths import get_weights_dir
 
     # determine models according to model names
     args.model_name = args.model_name.split('.')[0]
