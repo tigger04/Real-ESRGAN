@@ -10,7 +10,7 @@ PYTHON := $(VENV)/bin/python
 PIP := $(VENV)/bin/pip
 ACTIVATE := source $(VENV)/bin/activate
 LINK_DIR := /opt/homebrew/bin
-VERSION := $(shell cat VERSION)
+RELEASE_VERSION ?=
 
 .PHONY: help install clean update sync test link unlink release
 
@@ -73,4 +73,4 @@ sync: ## Stage all, commit, pull (merge), push
 	git push
 
 release: ## Tag a release and update Homebrew formula (usage: make release [VERSION=x.y.z])
-	@./scripts/release.sh $(VERSION)
+	@./scripts/release.sh $(RELEASE_VERSION)
