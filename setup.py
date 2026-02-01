@@ -104,4 +104,10 @@ if __name__ == '__main__':
         license='BSD-3-Clause License',
         setup_requires=['cython', 'numpy'],
         install_requires=get_requirements(),
+        entry_points={
+            'console_scripts': [
+                'upscale=realesrgan.cli_image:main',
+                'upscale-video=realesrgan.cli_video:main',
+            ],
+        },
         zip_safe=False)

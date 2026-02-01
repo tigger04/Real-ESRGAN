@@ -4,6 +4,8 @@
 
 ## <div align="center"><b><a href="README.md">English</a> | <a href="README_CN.md">简体中文</a></b></div>
 
+> **Fork note:** This is [`tigger04/Real-ESRGAN`](https://github.com/tigger04/Real-ESRGAN), a macOS-native wrapper around [xinntao/Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN). It adds `upscale` and `upscale-video` CLI commands, a Homebrew tap (`brew install tigger04/tap/real-esrgan-pro`), and automatic model-weight management. All upstream model code is preserved. See [`docs/vision.md`](docs/vision.md) for goals and rationale.
+
 <div align="center">
 
 👀[**Demos**](#-demos-videos) **|** 🚩[**Updates**](#-updates) **|** ⚡[**Usage**](#-quick-inference) **|** 🏰[**Model Zoo**](docs/model_zoo.md) **|** 🔧[Install](#-dependencies-and-installation)  **|** 💻[Train](docs/Training.md) **|** ❓[FAQ](docs/FAQ.md) **|** 🎨[Contribution](docs/CONTRIBUTING.md)
@@ -86,30 +88,76 @@ Other recommended projects:<br>
 
 ## 🔧 Dependencies and Installation
 
+### Quickstart (macOS / Homebrew)
+
+```bash
+brew install tigger04/tap/real-esrgan-pro
+```
+
+This installs `upscale` and `upscale-video` commands system-wide. Models download automatically on first use.
+
+### Quickstart (from source)
+
+Requires Python 3.12 and [PyTorch >= 1.7](https://pytorch.org/).
+
+```bash
+git clone https://github.com/tigger04/Real-ESRGAN.git
+cd Real-ESRGAN
+make install        # creates venv, installs deps, registers CLI commands
+make link           # (optional) symlinks upscale/upscale-video to /opt/homebrew/bin/
+```
+
+### Usage
+
+```bash
+# Upscale an image (4x by default)
+upscale -i photo.jpg -o output/
+
+# Upscale with face enhancement
+upscale -i photo.jpg -o output/ --face_enhance
+
+# Upscale a video
+upscale-video -i clip.mp4 -o output/
+
+# Use a specific model
+upscale -i photo.jpg -n RealESRGAN_x2plus -s 2
+
+# On Apple Silicon (no CUDA), you may need:
+upscale -i photo.jpg --fp32
+```
+
+Model weights are cached in `~/.cache/realesrgan/weights/` (override with `$REALESRGAN_WEIGHTS_DIR`).
+
+### Makefile targets
+
+| Target | Description |
+|--------|-------------|
+| `make install` | Create venv, install deps, register CLI entry points |
+| `make test` | Run tests |
+| `make sync` | Stage all, commit, pull (merge), push |
+| `make link` | Create system-wide wrapper scripts in `/opt/homebrew/bin/` |
+| `make unlink` | Remove wrapper scripts |
+| `make update` | Fetch and merge upstream changes |
+| `make release` | Tag release and update Homebrew formula |
+| `make clean` | Remove virtual environment |
+
+### Upstream installation (original method)
+
+<details>
+<summary>Click to expand</summary>
+
 - Python >= 3.7 (Recommend to use [Anaconda](https://www.anaconda.com/download/#linux) or [Miniconda](https://docs.conda.io/en/latest/miniconda.html))
 - [PyTorch >= 1.7](https://pytorch.org/)
 
-### Installation
+```bash
+git clone https://github.com/xinntao/Real-ESRGAN.git
+cd Real-ESRGAN
+pip install basicsr facexlib gfpgan
+pip install -r requirements.txt
+python setup.py develop
+```
 
-1. Clone repo
-
-    ```bash
-    git clone https://github.com/xinntao/Real-ESRGAN.git
-    cd Real-ESRGAN
-    ```
-
-1. Install dependent packages
-
-    ```bash
-    # Install basicsr - https://github.com/xinntao/BasicSR
-    # We use BasicSR for both training and inference
-    pip install basicsr
-    # facexlib and gfpgan are for face enhancement
-    pip install facexlib
-    pip install gfpgan
-    pip install -r requirements.txt
-    python setup.py develop
-    ```
+</details>
 
 ---
 
