@@ -39,7 +39,7 @@ clean: ## Remove the virtual environment and wrapper scripts
 	@echo "Cleaned. Run 'make install' to rebuild."
 
 test: $(VENV) ## Run tests
-	$(ACTIVATE) && $(PYTHON) -m pytest tests/test_paths.py tests/test_cli.py -v
+	$(ACTIVATE) && $(PYTHON) -m pytest tests/test_paths.py tests/test_cli.py -v -o "addopts="
 
 test-all: $(VENV) ## Run all tests (requires model weights)
 	$(ACTIVATE) && $(PYTHON) -m pytest tests/ -v
