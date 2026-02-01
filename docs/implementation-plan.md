@@ -1,4 +1,4 @@
-<!-- Version: 1.0 | Last updated: 2026-02-01 -->
+<!-- Version: 1.1 | Last updated: 2026-02-01 -->
 
 # Real-ESRGAN-pro: Implementation Plan
 
@@ -17,7 +17,7 @@ realesrgan/paths.py  ──→  resolves weight dir (~/.cache/realesrgan/weights
 setup.py entry_points  ──→  upscale → realesrgan.cli_image:main
                         ──→  upscale-video → realesrgan.cli_video:main
 
-Makefile  ──→  install / test / link / unlink / release
+Makefile  ──→  install / test / sync / link / unlink / release
 scripts/release.sh  ──→  tag + GH release + Homebrew formula update
 ```
 
@@ -25,6 +25,7 @@ scripts/release.sh  ──→  tag + GH release + Homebrew formula update
 
 | File | Purpose |
 |------|---------|
+| `realesrgan/_compat.py` | Compatibility shim for basicsr + newer torchvision (restores removed `functional_tensor` module) |
 | `realesrgan/paths.py` | Centralised weight cache dir (`~/.cache/realesrgan/weights/` or `$REALESRGAN_WEIGHTS_DIR`) |
 | `realesrgan/cli_image.py` | `main()` extracted from `inference_realesrgan.py`, uses `paths.get_weights_dir()` |
 | `realesrgan/cli_video.py` | `main()` extracted from `inference_realesrgan_video.py`, uses `paths.get_weights_dir()` |
@@ -41,7 +42,8 @@ scripts/release.sh  ──→  tag + GH release + Homebrew formula update
 | `setup.py` | Add `entry_points={'console_scripts': ['upscale=...', 'upscale-video=...']}` |
 | `inference_realesrgan.py` | Slim to thin wrapper: `from realesrgan.cli_image import main; main()` |
 | `inference_realesrgan_video.py` | Slim to thin wrapper: `from realesrgan.cli_video import main; main()` |
-| `Makefile` | Add `link`/`unlink`/`release` targets; modernise `install`/`clean` |
+| `realesrgan/__init__.py` | Import `_compat` before basicsr to fix torchvision compatibility |
+| `Makefile` | Add `sync`/`link`/`unlink`/`release` targets; modernise `install`/`clean` |
 | `requirements.txt` | Add `ffmpeg-python` (currently runtime-installed in video script) |
 
 ## Design Decisions
@@ -87,7 +89,7 @@ Follows the `image-outliner.rb` pattern:
 ### 5. Release script
 
 `scripts/release.sh` automates:
-1. Bump VERSION (patch +1 if no version argument given)
+1. Bump VERSION (minor +0.1 if no version argument given)
 2. Commit + tag
 3. Push to origin
 4. Create GitHub release via `gh release create`
@@ -101,22 +103,25 @@ Remove the runtime `pip install` of `ffmpeg-python` (lines 18-22 of `inference_r
 
 ## Execution Checklist
 
-- [ ] Add README fork note
-- [ ] Create `realesrgan/paths.py`
-- [ ] Create `realesrgan/cli_image.py`
-- [ ] Create `realesrgan/cli_video.py`
-- [ ] Slim `inference_realesrgan.py` to thin wrapper
-- [ ] Slim `inference_realesrgan_video.py` to thin wrapper
-- [ ] Update `setup.py` with entry points
-- [ ] Add `ffmpeg-python` to `requirements.txt`
-- [ ] Write `tests/test_paths.py`
-- [ ] Write `tests/test_cli.py`
-- [ ] Run all tests
-- [ ] Update Makefile with new targets
-- [ ] Create `scripts/release.sh`
-- [ ] Create Homebrew formula
-- [ ] Update README with new installation/usage docs
-- [ ] Verify `make install` + `upscale --help`
+- [x] Add README fork note
+- [x] Create `realesrgan/_compat.py` (unplanned — needed to fix basicsr/torchvision compatibility)
+- [x] Update `realesrgan/__init__.py` to import `_compat` before basicsr
+- [x] Create `realesrgan/paths.py`
+- [x] Create `realesrgan/cli_image.py`
+- [x] Create `realesrgan/cli_video.py`
+- [x] Slim `inference_realesrgan.py` to thin wrapper
+- [x] Slim `inference_realesrgan_video.py` to thin wrapper
+- [x] Update `setup.py` with entry points
+- [x] Add `ffmpeg-python` to `requirements.txt`
+- [x] Write `tests/test_paths.py`
+- [x] Write `tests/test_cli.py`
+- [x] Run all tests (7/7 pass)
+- [x] Update Makefile with new targets (`sync`/`link`/`unlink`/`release`)
+- [x] Create `scripts/release.sh`
+- [x] Create Homebrew formula
+- [x] Update README with vision content + installation/usage docs
+- [x] Verify `make install` + `upscale --help`
+- [x] First release: v0.4.0
 
 ## Constraints
 
