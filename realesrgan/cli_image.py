@@ -65,10 +65,13 @@ def main():
 
     # Heavy imports deferred to after argparse so --help / --version respond instantly
     import cv2
-    from realesrgan import _compat  # noqa: F401 — must run before basicsr imports
     from basicsr.archs.rrdbnet_arch import RRDBNet
     from basicsr.utils.download_util import load_file_from_url
-    from realesrgan import RealESRGANer
+
+    from realesrgan import (
+        RealESRGANer,
+        _compat,  # noqa: F401 — must run before basicsr imports
+    )
     from realesrgan.archs.srvgg_arch import SRVGGNetCompact
     from realesrgan.paths import get_weights_dir
 

@@ -2,7 +2,6 @@
 # ABOUTME: Returns ~/.cache/realesrgan/weights/ by default, overridable via $REALESRGAN_WEIGHTS_DIR.
 import os
 
-
 _DEFAULT_CACHE_DIR = os.path.join(os.path.expanduser('~'), '.cache', 'realesrgan', 'weights')
 
 

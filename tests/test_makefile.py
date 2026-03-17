@@ -2,7 +2,6 @@
 # ABOUTME: Verifies AC2.1–AC2.7: install, stale venv detection, symlinks, clean, PATH warning.
 import os
 import subprocess
-import stat
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 VENV_DIR = os.path.join(REPO_ROOT, '.venv')

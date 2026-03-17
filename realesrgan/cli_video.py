@@ -375,14 +375,17 @@ def main():
     global RRDBNet, SRVGGNetCompact, RealESRGANer
     global load_file_from_url, get_weights_dir
     import cv2
+    import ffmpeg
     import numpy as np
     import torch
-    import ffmpeg
-    from tqdm import tqdm
-    from realesrgan import _compat  # noqa: F401 — must run before basicsr imports
     from basicsr.archs.rrdbnet_arch import RRDBNet
     from basicsr.utils.download_util import load_file_from_url
-    from realesrgan import RealESRGANer
+    from tqdm import tqdm
+
+    from realesrgan import (
+        RealESRGANer,
+        _compat,  # noqa: F401 — must run before basicsr imports
+    )
     from realesrgan.archs.srvgg_arch import SRVGGNetCompact
     from realesrgan.paths import get_weights_dir
 

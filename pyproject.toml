@@ -1,0 +1,15 @@
+[tool.ruff]
+# Permissive rules — avoid breaking upstream code.
+# Scoped to our files via pre-commit files: pattern.
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+# Ignore rules that conflict with upstream style
+ignore = [
+    "E501",  # line too long — upstream code exceeds 120 frequently
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["realesrgan"]
