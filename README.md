@@ -145,7 +145,7 @@ Requires Python 3.12 and [PyTorch >= 1.7](https://pytorch.org/).
 git clone https://github.com/tigger04/Real-ESRGAN.git
 cd Real-ESRGAN
 make install        # creates venv, installs deps, registers CLI commands
-make link           # (optional) symlinks upscale/upscale-video to /opt/homebrew/bin/
+make link           # (optional) symlinks upscale/upscale-video to ~/.local/bin/
 ```
 
 ### Usage
@@ -176,7 +176,7 @@ Model weights are cached in `~/.cache/realesrgan/weights/` (override with `$REAL
 | `make install` | Create venv, install deps, register CLI entry points |
 | `make test` | Run tests |
 | `make sync` | Stage all, commit, pull (merge), push |
-| `make link` | Create system-wide wrapper scripts in `/opt/homebrew/bin/` |
+| `make link` | Create wrapper scripts in `~/.local/bin/` |
 | `make unlink` | Remove wrapper scripts |
 | `make update` | Fetch and merge upstream changes |
 | `make release` | Tag release and update Homebrew formula |
