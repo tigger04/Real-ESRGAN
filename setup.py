@@ -95,13 +95,13 @@ if __name__ == '__main__':
         packages=find_packages(exclude=('options', 'datasets', 'experiments', 'results', 'tb_logger', 'wandb')),
         classifiers=[
             'Development Status :: 4 - Beta',
-            'License :: OSI Approved :: Apache Software License',
+            'License :: OSI Approved :: BSD License',
             'Operating System :: OS Independent',
             'Programming Language :: Python :: 3',
-            'Programming Language :: Python :: 3.7',
-            'Programming Language :: Python :: 3.8',
+            'Programming Language :: Python :: 3.12',
         ],
-        license='BSD-3-Clause License',
+        license='BSD-3-Clause',
+        python_requires='>=3.12',
         setup_requires=['cython', 'numpy'],
         install_requires=get_requirements(),
         entry_points={
