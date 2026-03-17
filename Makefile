@@ -52,7 +52,7 @@ clean: unlink ## Remove the virtual environment and wrapper scripts
 	@echo "Cleaned. Run 'make install' to rebuild."
 
 test: ensure-venv ## Run tests
-	$(ACTIVATE) && $(PYTHON) -m pytest tests/test_paths.py tests/test_cli.py tests/test_makefile.py -v -o "addopts="
+	$(ACTIVATE) && $(PYTHON) -m pytest tests/test_paths.py tests/test_cli.py tests/test_makefile.py tests/test_precommit.py tests/test_setup.py -v -o "addopts="
 
 test-all: ensure-venv ## Run all tests (requires model weights)
 	$(ACTIVATE) && $(PYTHON) -m pytest tests/ -v

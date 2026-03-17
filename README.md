@@ -182,6 +182,15 @@ Model weights are cached in `~/.cache/realesrgan/weights/` (override with `$REAL
 | `make release` | Tag release and update Homebrew formula |
 | `make clean` | Remove virtual environment |
 
+### Documentation
+
+| Document | Description |
+|----------|-------------|
+| [docs/VISION.md](docs/VISION.md) | Project goals, non-goals, and design philosophy |
+| [docs/architecture.md](docs/architecture.md) | Module structure, data flow, and build/distribution |
+| [docs/testing.md](docs/testing.md) | Test strategy, test suite overview, and how to run tests |
+| [docs/implementation-plan.md](docs/implementation-plan.md) | Original implementation plan and design decisions |
+
 ### Upstream installation (original method)
 
 <details>
