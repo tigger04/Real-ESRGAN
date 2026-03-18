@@ -374,6 +374,8 @@ def main():
     global cv2, np, torch, ffmpeg, tqdm
     global RRDBNet, SRVGGNetCompact, RealESRGANer
     global load_file_from_url, get_weights_dir
+    from realesrgan import _compat  # noqa: F401, I001 — must run before basicsr imports (issue #7)
+
     import cv2
     import ffmpeg
     import numpy as np
@@ -382,10 +384,7 @@ def main():
     from basicsr.utils.download_util import load_file_from_url
     from tqdm import tqdm
 
-    from realesrgan import (
-        RealESRGANer,
-        _compat,  # noqa: F401 — must run before basicsr imports
-    )
+    from realesrgan import RealESRGANer
     from realesrgan.archs.srvgg_arch import SRVGGNetCompact
     from realesrgan.paths import get_weights_dir
 
