@@ -10,17 +10,19 @@ _compat_loaded = False
 def __getattr__(name):
     """Lazy-load heavy submodules on first attribute access."""
     global _compat_loaded
+    import importlib
+
     if name == '_compat':
-        from . import _compat
         _compat_loaded = True
-        return _compat
+        mod = importlib.import_module('._compat', __name__)
+        globals()['_compat'] = mod
+        return mod
 
     # Ensure compatibility patch is applied before any basicsr imports
     if not _compat_loaded:
-        from . import _compat  # noqa: F401
         _compat_loaded = True
+        importlib.import_module('._compat', __name__)
 
-    import importlib
     for submod_name in _HEAVY_SUBMODULES:
         try:
             submod = importlib.import_module(f'.{submod_name}', __name__)

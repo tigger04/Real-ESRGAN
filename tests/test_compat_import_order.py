@@ -1,5 +1,5 @@
 # ABOUTME: Tests for _compat import ordering — verifies the torchvision compatibility
-# ABOUTME: patch loads before basicsr in both CLI entry points (issue #7).
+# ABOUTME: patch loads before basicsr in both CLI entry points (issues #7, #8).
 import os
 import re
 import subprocess
@@ -8,35 +8,61 @@ import sys
 import pytest
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+VENV_BIN = os.path.join(REPO_ROOT, '.venv', 'bin')
 
 
 @pytest.mark.regression(test_id="RT-001")
-def test_cli_image_imports_without_module_not_found_error():
-    """AC7.1: cli_image.main() loads imports without ModuleNotFoundError."""
-    # Arrange — invoke upscale with a non-existent input to get past argparse
+def test_cli_image_entry_point_imports_successfully():
+    """AC8.1: upscale entry point imports all dependencies and reaches argument processing."""
+    # Arrange — invoke via the actual entry-point script, not python -m
+    upscale = os.path.join(VENV_BIN, 'upscale')
+    assert os.path.isfile(upscale), f'Entry point not found: {upscale} — run make install'
     # Act
     result = subprocess.run(
-        [sys.executable, '-m', 'realesrgan.cli_image', '-i', '/nonexistent.png'],
+        [upscale, '-i', '/nonexistent.png'],
         capture_output=True, text=True, timeout=60,
     )
-    # Assert — may fail for other reasons, but must not have ModuleNotFoundError
+    # Assert — may fail for other reasons, but imports must succeed
     assert 'ModuleNotFoundError' not in result.stderr, (
-        f'ModuleNotFoundError in cli_image imports:\n{result.stderr}'
+        f'Import failure in upscale entry point:\n{result.stderr}'
+    )
+    assert 'RecursionError' not in result.stderr, (
+        f'Recursion in upscale entry point:\n{result.stderr}'
     )
 
 
 @pytest.mark.regression(test_id="RT-002")
-def test_cli_video_imports_without_module_not_found_error():
-    """AC7.2: cli_video.main() loads imports without ModuleNotFoundError."""
-    # Arrange — invoke upscale-video with a non-existent input to get past argparse
+def test_cli_video_entry_point_imports_successfully():
+    """AC8.1: upscale-video entry point imports all dependencies and reaches argument processing."""
+    # Arrange
+    upscale_video = os.path.join(VENV_BIN, 'upscale-video')
+    assert os.path.isfile(upscale_video), f'Entry point not found: {upscale_video} — run make install'
     # Act
     result = subprocess.run(
-        [sys.executable, '-m', 'realesrgan.cli_video', '-i', '/nonexistent.mp4'],
+        [upscale_video, '-i', '/nonexistent.mp4'],
         capture_output=True, text=True, timeout=60,
     )
     # Assert
     assert 'ModuleNotFoundError' not in result.stderr, (
-        f'ModuleNotFoundError in cli_video imports:\n{result.stderr}'
+        f'Import failure in upscale-video entry point:\n{result.stderr}'
+    )
+    assert 'RecursionError' not in result.stderr, (
+        f'Recursion in upscale-video entry point:\n{result.stderr}'
+    )
+
+
+@pytest.mark.regression(test_id="RT-005")
+def test_package_import_of_compat_resolves_cleanly():
+    """AC8.2: from realesrgan import _compat completes without recursion."""
+    # Arrange/Act — fresh interpreter, import through the package interface
+    result = subprocess.run(
+        [sys.executable, '-c', 'from realesrgan import _compat'],
+        capture_output=True, text=True, timeout=30,
+        cwd=REPO_ROOT,
+    )
+    # Assert
+    assert result.returncode == 0, (
+        f'Package import of _compat failed (exit {result.returncode}):\n{result.stderr}'
     )
 
 
