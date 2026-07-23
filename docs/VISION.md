@@ -43,4 +43,4 @@ All upstream files remain functional and unmodified in spirit.
 
 ## Licence
 
-BSD-3-Clause (inherited from upstream). Our additions are MIT (Copyright Taḋg Paul).
+BSD-3-Clause (inherited from upstream). Our additions are MIT (Copyright Tadhg O'Brien).

@@ -37,7 +37,7 @@ This is a fork of [`xinntao/Real-ESRGAN`](https://github.com/xinntao/Real-ESRGAN
 
 ## Licence
 
-BSD-3-Clause (inherited from upstream). Our additions are MIT (Copyright Tadg Paul).
+BSD-3-Clause (inherited from upstream). Our additions are MIT (Copyright Tadhg O'Brien).
 
 ---
 
